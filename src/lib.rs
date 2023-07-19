@@ -23,7 +23,7 @@ pub fn main_js() -> Result<(), JsValue> {
         .dyn_into::<web_sys::CanvasRenderingContext2d>()
         .unwrap();
     // context.fill();
-    sierpinski(&context, [(300.0, 0.0), (0.0, 600.0), (600.0, 600.0)], 2);
+    sierpinski(&context, [(300.0, 0.0), (0.0, 600.0), (600.0, 600.0)], 5);
     // Your code goes here!
     console::log_1(&JsValue::from_str("Done son!"));
 
@@ -35,13 +35,17 @@ fn sierpinski(context: &web_sys::CanvasRenderingContext2d, points: [(f64, f64); 
     let depth = depth - 1;
     if depth > 0 {
         let [top, left, right] = points;
-        let left_middle = ((top.0 + left.0) / 2.0, (top.1 + left.1) / 2.0);
-        let right_middle = ((top.0 + right.0) / 2.0, (top.1 + right.1) / 2.0);
-        let bottom_middle = (top.0, right.1);
+        let left_middle = midpoint(top, left);
+        let right_middle = midpoint(top, right);
+        let bottom_middle = midpoint(left, right);
         sierpinski(&context, [top, left_middle, right_middle], depth);
         sierpinski(&context, [left_middle, left, bottom_middle], depth);
         sierpinski(&context, [right_middle, bottom_middle, right], depth);
     }
+}
+
+fn midpoint(point_1: (f64, f64), point_2: (f64, f64)) -> (f64, f64) {
+    ((point_1.0 + point_2.0) / 2.0, (point_1.1 + point_2.1) / 2.0)
 }
 
 fn draw_triangle(context: &web_sys::CanvasRenderingContext2d, points: [(f64, f64); 3]) {
