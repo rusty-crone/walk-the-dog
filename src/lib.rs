@@ -35,8 +35,6 @@ pub fn main_js() -> Result<(), JsValue> {
                 .and_then(|mut opt| opt.take()) {
                 success_tx.send(Ok(()));
             }
-                // .send(Ok(()));
-            // web_sys::console::log_1(&JsValue::from_str("loaded"));
         });
         let error_callback = Closure::once(move |err| {
            if let Some(error_tx) = error_tx.lock().ok()
@@ -49,7 +47,6 @@ pub fn main_js() -> Result<(), JsValue> {
         image.set_src("Idle (1).png");
         success_rx.await;
         context.draw_image_with_html_image_element(&image, 0.0, 0.0);
-        sierpinski(&context, [(300.0, 0.0), (0.0, 600.0), (600.0, 600.0)], 5);
     });
 
 
